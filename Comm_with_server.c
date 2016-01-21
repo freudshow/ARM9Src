@@ -183,15 +183,11 @@ INT32 server_com_rev(INT32 u32DeviceFd) {
 	unsigned char c;
 	INT8 cLoopFlag = 3;
 	fd_set ReadSetFD;
-	struct timeval stTimeVal;
 	uint8 ret;
 	while (1) {
 		FD_ZERO(&ReadSetFD);
 		FD_SET(u32DeviceFd, &ReadSetFD);
 		/* 设置等待的超时时间 */
-		stTimeVal.tv_sec = SERVER_SEC_TIME_OUT;
-		stTimeVal.tv_usec = SERVER_USEC_TIME_OUT;
-		//if (select(u32DeviceFd+1, &ReadSetFD, NULL, NULL, &stTimeVal) <= 0) 
 		if (select(u32DeviceFd + 1, &ReadSetFD, NULL, NULL, NULL) <= 0) {
 			printf(" [%s][%s][%d]Server REV is time out .....\n", FILE_LINE);
 			cLoopFlag--;
