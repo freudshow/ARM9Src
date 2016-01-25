@@ -1,8 +1,7 @@
 #include "includes.h"
 #include "commap.h"
 
-//考虑IPDATA连续两次以上发过来,由于对列没有做满了等待而是丢掉,这里定义的比较大
-
+//考虑IPDATA连续两次以上发过来,由于队列没有做满了等待而是丢掉,这里定义的比较大
 uint8 *pQueues[UP_COMMU_DEV_ARRAY];
 uint8 UpRecQueue_Gprs[GPRS_REC_QUEUES_LENGTH];
 uint8 USART3RecQueue_At[USART3_REC_QUEUE_AT_LENGTH];
@@ -138,16 +137,12 @@ uint8 UpGetch(uint8 dev, uint8* data, uint16 OutTime) {
 	uint8 err = 0x00;
 	uint8 ret;
 	while ((ret = QueueRead(data, (void*) pQueues[dev])) != QUEUE_OK) {
-		//printf("[%s][%s][%d] ret = %d QUEUE_EMPTY \n",FILE_LINE,ret);
 		OSSemPend(dev, (uint32) OutTime, &err);
 		if (err != OS_ERR_NONE) {
-			//debug_err(gDebugModule[GPRS_MODULE],"[%s][%s][%d]OSSemPend err=%d\n",FILE_LINE,err);
 			return err;
 		} else {
-			//printf("[%s][%s][%d] err = %d\n",FILE_LINE,err);
 		}
 	}
-	//printf("%c",*data);
 	return 0;
 }
 
@@ -172,8 +167,6 @@ uint8 UpRecQueueWrite(uint8 dev, uint8* buf, uint32 n) //不可重入
 
 void UpDevSend(uint8 dev, uint8 *Data, uint32 n) /*不可重入*/
 {
-	//uint32 i, CirTimes, Residual;
-
 	switch (dev) {
 	case UP_COMMU_DEV_ZIGBEE:				//针对于Zigbee发送数据，每次100个字节，每次发送间隔333MS
 

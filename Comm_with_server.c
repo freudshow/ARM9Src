@@ -175,7 +175,7 @@ INT32 Gprs_com_send(INT32 u32DeviceFd) {
 	return 0;
 }
 /************************************************************************************************
- 德鲁热表的接受函数
+接受数据的处理函数
  参数1:设备的描述符，在主线程中准备好，在此使用     
  返回 CONTROL_RET_FAIL 发送失败， CONTROL_RET_SUC 发送成功
  ************************************************************************************************/
@@ -195,14 +195,12 @@ INT32 server_com_rev(INT32 u32DeviceFd) {
 		}
 		if (FD_ISSET(u32DeviceFd, &ReadSetFD)) {
 			if (read(u32DeviceFd, &c, 1) == 1) {
-				//printf("[%s][%s][%d]  c= %c \n",FILE_LINE,c);
 				ret = QueueWrite((void*) USART3RecQueue_At, c);
 				if (ret != QUEUE_OK) {
 					printf("[%s][%s][%d] ret=%d queue full\n", FILE_LINE, ret);
 				}
 				ret = QueueWrite((void*) USART3RecQueue_AtIPD, c);
 				if (ret != QUEUE_OK) {
-
 					printf(
 							"[%s][%s][%d] ret=%d queue full  The Queue has data Num is %d\n",
 							FILE_LINE, ret, QueueNData(USART3RecQueue_AtIPD));

@@ -41,21 +41,17 @@ static int parserxml(xmlNodePtr rootNode) {
 	while (NULL != curNode) {
 		printf("%s\n", curNode->name);
 		sonNode = curNode->children;
-		if (!xmlStrcmp(curNode->name, BAD_CAST "common"))      //通用部分
-				{
+		if (!xmlStrcmp(curNode->name, BAD_CAST "common")) {//通用部分
 			while (NULL != sonNode) {
-				//printf("%s\n",sonNode->name);
 				if (!xmlStrcmp(sonNode->name, BAD_CAST "building_id")) {
 					tmp = xmlNodeGetContent(sonNode);  //取出节点中的内容
 					strcpy((char*) gxml_ComInfo_R.building_id, (char*) tmp);
-					//printf("building_id=%s\n",gxml_ComInfo_R.building_id);
 					debug_debug(gDebugModule[XML_MODULE], "building_id=%s\n",
 							gxml_ComInfo_R.building_id);
 				}
 				if (!xmlStrcmp(sonNode->name, BAD_CAST "gateway_id")) {
 					tmp = xmlNodeGetContent(sonNode);  //取出节点中的内容
 					strcpy((char*) gxml_ComInfo_R.gateway_id, (char*) tmp);
-					//printf("gateway_id=%s\n",gxml_ComInfo_R.gateway_id);
 					debug_debug(gDebugModule[XML_MODULE], "gateway_id=%s\n",
 							gxml_ComInfo_R.gateway_id);
 				}
@@ -69,11 +65,8 @@ static int parserxml(xmlNodePtr rootNode) {
 				sonNode = sonNode->next;
 			}
 		}
-		if (xmlHasProp(curNode, BAD_CAST "operation"))  //查找带有属性operation的节点
-				{
+		if (xmlHasProp(curNode, BAD_CAST "operation")) {//查找带有属性operation的节点
 			propNodePtr = curNode;
-			printf("property is %s\n", propNodePtr->properties->name);
-
 			if (!xmlStrcmp(propNodePtr->name, BAD_CAST "id_validate")) //身份验证数据包
 					{
 				propvalue = xmlGetProp(propNodePtr, BAD_CAST "operation"); //获取属性值
@@ -95,8 +88,7 @@ static int parserxml(xmlNodePtr rootNode) {
 					}
 					sonNode = sonNode->next;                     //获取兄弟节点 
 				}
-			} else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "heart_beat")) //心跳校时数据包
-					{
+			} else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "heart_beat")) {//心跳校时数据包
 				propvalue = xmlGetProp(propNodePtr, BAD_CAST "operation"); //获取属性值
 				strcpy((char*) gxml_BeatInfo_R.operation, (char*) propvalue);
 				sonNode = propNodePtr->children;
@@ -122,7 +114,6 @@ static int parserxml(xmlNodePtr rootNode) {
 				if (!xmlStrcmp(propvalue, BAD_CAST "period")) {
 					tmp = xmlNodeGetContent(sonNode);
 					strcpy((char*) gxml_CfgInfo_R.period, (char*) tmp);
-					//printf("config period is %s\n",gxml_CfgInfo_R.period);
 					debug_debug(gDebugModule[XML_MODULE],
 							"config period is %s\n", gxml_CfgInfo_R.period);
 				} else if (!xmlStrcmp(propvalue, BAD_CAST "ip_port")) {
@@ -130,36 +121,30 @@ static int parserxml(xmlNodePtr rootNode) {
 					i = 0;
 					while (NULL != sonNode) {
 						grandsonNode = sonNode->children;
-						//printf("grandsonNode is %s\n",grandsonNode->name);
 						debug_debug(gDebugModule[XML_MODULE],
 								"grandsonNode is %s\n", grandsonNode->name);
 						tmp = xmlNodeGetContent(grandsonNode);
 						strcpy((char*) gxml_IPInfo_R.server[i].ip, (char*) tmp);
-						//printf("ipconfig ip is %s\n",gxml_IPInfo_R.server[i].ip);
 						debug_debug(gDebugModule[XML_MODULE],
 								"ipconfig ip is %s\n",
 								gxml_IPInfo_R.server[i].ip);
 
 						grandsonNode = grandsonNode->next;
-						//printf("grandsonNode is %s\n",grandsonNode->name);
 						debug_debug(gDebugModule[XML_MODULE],
 								"grandsonNode is %s\n", grandsonNode->name);
 						tmp = xmlNodeGetContent(grandsonNode);
 						strcpy((char*) gxml_IPInfo_R.server[i].dns,
 								(char*) tmp);
-						//printf("ipconfig dns is %s\n",gxml_IPInfo_R.server[i].dns);
 						debug_debug(gDebugModule[XML_MODULE],
 								"ipconfig dns is %s\n",
 								gxml_IPInfo_R.server[i].dns);
 
 						grandsonNode = grandsonNode->next;
-						//printf("grandsonNode is %s\n",grandsonNode->name);
 						debug_debug(gDebugModule[XML_MODULE],
 								"grandsonNode is %s\n", grandsonNode->name);
 						tmp = xmlNodeGetContent(grandsonNode);
 						strcpy((char*) gxml_IPInfo_R.server[i].port,
 								(char*) tmp);
-						//printf("ipconfig port is %s\n",gxml_IPInfo_R.server[i].port);
 						debug_debug(gDebugModule[XML_MODULE],
 								"ipconfig port is %s\n",
 								gxml_IPInfo_R.server[i].port);
@@ -167,8 +152,7 @@ static int parserxml(xmlNodePtr rootNode) {
 						i++;
 					}
 				}
-			} else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "filetransfer")) //文件传输数据包
-					{
+			} else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "filetransfer")) {//文件传输数据包
 				propvalue = xmlGetProp(propNodePtr, BAD_CAST "operation");
 				strcpy((char*) gxml_TransInfo_R.operation, (char*) propvalue);
 				printf("file transfer operation is %s\n",
@@ -226,13 +210,14 @@ static int parserxml(xmlNodePtr rootNode) {
 						sonNode = sonNode->next;
 					}
 				}
-			} else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "query"))   //查询配置
-					{
+			}
+			else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "query")) {  //查询配置
+					
 				propvalue = xmlGetProp(propNodePtr, BAD_CAST "operation");
 				strcpy((char*) gxml_QueryInfo_R.operation, (char*) propvalue);
 				printf("query operation is %s\n", gxml_QueryInfo_R.operation);
-			} else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "ex_config")) //额外配置
-					{
+			}
+			else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "ex_config")) {//额外配置
 				propvalue = xmlGetProp(propNodePtr, BAD_CAST "operation");
 				strcpy((char*) gxml_ExInfo_R.operation, (char*) propvalue);
 				printf("ex config operation is %s\n", gxml_ExInfo_R.operation);
@@ -256,7 +241,8 @@ static int parserxml(xmlNodePtr rootNode) {
 						}
 						sonNode = sonNode->next;
 					}
-				} else if (!xmlStrcmp(propvalue, BAD_CAST "report_mode")) {
+				}
+				else if (!xmlStrcmp(propvalue, BAD_CAST "report_mode")) {
 					while (NULL != sonNode) {
 						if (!xmlStrcmp(sonNode->name, BAD_CAST "report_mode")) {
 							tmp = xmlNodeGetContent(sonNode);  //取出节点中的内容
@@ -268,8 +254,8 @@ static int parserxml(xmlNodePtr rootNode) {
 						sonNode = sonNode->next;
 					}
 				}
-			} else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "update"))  //密钥更新
-					{
+			}
+			else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "update")) {//密钥更新
 				propvalue = xmlGetProp(propNodePtr, BAD_CAST "operation");
 				strcpy((char*) gxml_KeyInfo_R.operation, (char*) propvalue);
 				printf("update key operation is %s\n",
@@ -284,7 +270,8 @@ static int parserxml(xmlNodePtr rootNode) {
 						}
 						sonNode = sonNode->next;
 					}
-				} else if (!xmlStrcmp(propvalue, BAD_CAST "aes_key")) {
+				}
+				else if (!xmlStrcmp(propvalue, BAD_CAST "aes_key")) {
 					while (NULL != sonNode) {
 						if (!xmlStrcmp(sonNode->name, BAD_CAST "aes_keydata")) {
 							tmp = xmlNodeGetContent(sonNode);  //取出节点中的内容
@@ -294,13 +281,12 @@ static int parserxml(xmlNodePtr rootNode) {
 						sonNode = sonNode->next;
 					}
 				}
-			} else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "control")) //服务器控制
-					{
+			} 
+			else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "control")) {//服务器控制
 				propvalue = xmlGetProp(propNodePtr, BAD_CAST "operation");
 				strcpy((char*) gxml_CtlInfo_R.operation, (char*) propvalue);
 				printf("control operation is %s\n", gxml_CtlInfo_R.operation);
 			}
-
 			/*begin add by yangmin - 20130829*/
 			else if (!xmlStrcmp(propNodePtr->name, BAD_CAST "modify")) {
 				propvalue = xmlGetProp(propNodePtr, BAD_CAST "num");
@@ -380,7 +366,6 @@ static int parserxml(xmlNodePtr rootNode) {
 									FILE_LINE, gxml_realtime_req_t.channel);
 						}
 						tmp = xmlNodeGetContent(sonNode);  //取出节点中的内容
-						//strncpy((char*)gxml_realtime_req_t.meterAddr,(char*)tmp,14);
 						strcpy((char*) gxml_realtime_req_t.meterAddr,
 								(char*) tmp);
 						debug_info(gDebugModule[XML_MODULE],
