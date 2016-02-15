@@ -123,7 +123,7 @@ void OSSemPost(uint8 dev) {
 	sem_post(&QueueSems[dev]); /*º”“ª*/
 }
 /**/
-void Msic_Init(void) {
+void Misc_Init(void) {
 	int ret = 0;
 
 	ret = sem_init(&CRITICAL_sem, 0, 1);

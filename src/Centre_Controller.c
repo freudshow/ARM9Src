@@ -830,7 +830,7 @@ INT32 main() {
 	printf("       Compile time:("__TIME__","__DATE__")\n");
 	printf("**********************************************\n");
 
-	Msic_Init();
+    Misc_Init();
 	/* 打开IO控制驱动*/
 	g_uiIoControl = open(IO_CONTROL, O_RDWR, 0);
 	if (g_uiIoControl < 0) {

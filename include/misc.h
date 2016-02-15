@@ -103,7 +103,7 @@ void OS_EXIT_CRITICAL(void);
 void OSSemPend(uint8 dev, uint32 timeout, uint8 *perr);
 void OSSemPost(uint8 dev);
 
-extern void Msic_Init(void);
+extern void Misc_Init(void);
 
 void ShowTime(void);
 
