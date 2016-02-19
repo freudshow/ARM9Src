@@ -64,7 +64,7 @@ typedef struct {
 
 	uint8 (*ReadEmpty)(); /* 读空处理函数             */
 	uint8 (*WriteFull)(); /* 写满处理函数             */
-	QUEUE_DATA_TYPE Buf[1]; /* 存储数据的空间           */
+	QUEUE_DATA_TYPE Buf[1]; /* 以上成员占有的字节数   */
 } DataQueue;
 
 #ifndef IN_QUEUE

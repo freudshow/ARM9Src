@@ -290,7 +290,7 @@ INT32 mbus_main_proc() {
 			sem_post(&Xml_Deal_Sem);
 			/*end:yangfei added 20130902 for 抄表结束，通知上报处理*/
 		}
-		usleep(2);
+		sleep(2);
 	}
 	return (CONTROL_RET_SUC);
 }
@@ -353,7 +353,7 @@ INT32 com485_main_proc() {
 
 			g_uiReadMeterStatus = STATU_READ_MBUS;
 		}
-		usleep(2);
+		sleep(2);
 	}
 	return (CONTROL_RET_SUC);
 }
@@ -549,7 +549,7 @@ void ReadMeter_timer() {
 	if (setitimer(ITIMER_REAL, &tick, NULL) < 0)
 		printf("ReadMeter_timer set itimer is error ~\n");
 	while (1)
-		;
+		sleep(1);
 }
 /*打开并初始化设备*/
 int open_device(INT32 *fd, char*file, COM_INFO_T DeviceInfo) {
@@ -591,7 +591,7 @@ int GPRS_Rec_main_proc() {
 
 	while (1) {
 		server_com_rev(g_uiGprsFd);
-		usleep(2);
+		sleep(2);
 	}
 	return (CONTROL_RET_SUC);
 }

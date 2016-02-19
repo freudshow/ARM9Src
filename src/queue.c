@@ -68,6 +68,7 @@ uint8 QueueCreate(void *Buf, uint32 SizeOfBuf, uint8 (*ReadEmpty)(),
 		/* 初始化结构体数据 */
 		Queue->MaxData = (SizeOfBuf - (uint32) (((DataQueue *) 0)->Buf))
 				/ sizeof(QUEUE_DATA_TYPE); /* 计算队列可以存储的数据数目 */
+        printf("sizeOfBuf: %u, (uint32)(((DataQueue*)0)->Buf)): %u\n", SizeOfBuf, (uint32)(((DataQueue*)0)->Buf));
 		Queue->End = Queue->Buf + Queue->MaxData; /* 计算数据缓冲的结束地址 */ //倪注 这里End指向最后一个可用字节的下一个字节  
 		Queue->Out = Queue->Buf;
 		Queue->In = Queue->Buf;
