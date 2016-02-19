@@ -922,10 +922,20 @@ INT32 main() {
 		printf("Create CommandDeal pthread error!\n");
 		exit(1);
 	}
+	pthread_join(MbusPthreadId, NULL);
+	pthread_join(Com485PthreadId, NULL);
+	pthread_join(GPRS_Rec_Main_PthreadId, NULL);
+	pthread_join(GPRS_Rec_PthreadId, NULL);
+	pthread_join(TaskUpRecGprs_PthreadId, NULL);
+	pthread_join(GPRS_Mana_PthreadId, NULL);
+	pthread_join(GPRS_Upsend_PthreadId, NULL);
+	pthread_join(ReportUp_PthreadId, NULL);
+	pthread_join(XML_main_PthreadId, NULL);
+	pthread_join(TimerPthreadId, NULL);
+	pthread_join(CommandDealPthreadId, NULL);
+	//while (1) {
 
-	while (1) {
-
-	}
+	//}
 	return (0);
 }
 

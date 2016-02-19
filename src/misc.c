@@ -42,6 +42,7 @@ void OS_ENTER_CRITICAL(void) {
 	}
 	debug_debug(gDebugModule[MSIC_MODULE], "[%s][%s][%d]value=%d \n", FILE_LINE,
 			value);
+    printf("CRITICAL_sem: %d\n", value);
 	sem_wait(&CRITICAL_sem); /*ºı“ª*/
 }
 
