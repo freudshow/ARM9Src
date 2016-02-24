@@ -43,12 +43,12 @@
 	</common>
 	<!-- 心跳/校时 ->
 	<!-- 操作有2种类型
-		  notify:采集器定期给服务器发送存活通知
-			time:服务器在收到存活通知后发送授时信息，此时子元素time有效
-	  -->
+		notify:采集器定期给服务器发送存活通知
+		time:服务器在收到存活通知后发送授时信息，此时子元素time有效
+	-->
 	<heart_beat operation="notify/time">
-            <time>YYYYMMDDHHMMSS</time>
-     </heart_beat>
+        <time>YYYYMMDDHHMMSS</time>
+    </heart_beat>
 </root>
 
 3．能耗远传数据包(data)
@@ -56,10 +56,10 @@
 <root>
 	<!-- 通用部分 -->
 	<!-- 
-      building_id:楼栋编号
-      gateway_id:采集器编号
-      type:能耗远传数据包的类型
-      -->
+		building_id:楼栋编号
+		gateway_id:采集器编号
+		type:能耗远传数据包的类型
+    -->
 	<common>
 		<building_id>XXXXXX</building_id>
 		<gateway_id>XXX</gateway_id>
@@ -69,20 +69,20 @@
 	<!-- 操作有4种类型
 	query:服务器查询数据采集器，不需要子元素
 	reply:采集器对服务器查询的应答
-			report:采集器定时上报的能耗数据
-			continuous:采集器断点续传的能耗数据
-			continuous_ack:全部续传数据包接收完成后，服务器对断点续传的应答，不需要子元素
-		 元素有5种类型
-	sequence元素:采集器向服务器发送数据的序号
+		report:采集器定时上报的能耗数据
+		continuous:采集器断点续传的能耗数据
+		continuous_ack:全部续传数据包接收完成后，服务器对断点续传的应答，不需要子元素
+		元素有5种类型
+			sequence元素:采集器向服务器发送数据的序号
 			parser元素:向服务器发送的数据是否经采集器解析过
 			time元素:数据采集时间
 			total元素:断点续传时有效，表示需要断点续传数据包的总数
 			current元素:断点续传时有效，表示当前断点续传数据包的编号
 			port元素:计量装置的设备号，具有id属性
 			function元素:每个计量装置的具体采集功能，具有下列3种属性，
-			  id属性:计量装置的数据采集功能编号（供多功能电能表使用）
-	coding属性:能耗数据分类/分项编码
-			  error属性:该功能出现错误的状态码，0表示没有错误
+				id属性:计量装置的数据采集功能编号（供多功能电能表使用）
+				coding属性:能耗数据分类/分项编码
+				error属性:该功能出现错误的状态码，0表示没有错误
 	-->
 	<data operation="query/reply/report/continuous/continuous_ack">
 		<sequence>XXXXXXXX</sequence>
@@ -248,9 +248,9 @@
 	soft_ver: 软件版本号
 	-->
 	<query operation="query_config/reply_config">
-	<period>15</period>
-	<report_mode>1</report_mode>
-	<soft_ver>XXX</soft_ver>
+		<period>15</period>
+		<report_mode>1</report_mode>
+		<soft_ver>XXX</soft_ver>
 	</query>
 </root>
 
@@ -368,9 +368,8 @@
 	result:    上报的查询结果，仅在Query_rsp时有效,count为查询的数据个数
 	table_item:   查询的表项，仅在Query_rsp时有效
 	-->
-
 	<report_srv operation="Query_req/Query_rsp">
-		<condition>select * from Meter_Info_Table</conditon>
+		<condition>select * from Meter_Info_Table</condition>
 		<flag>0</flag>
 		<result count="20">
 			<table_item>15-13-01-01, 11110071100109,25,1,3,1010, 0001</talbe_item>
@@ -445,7 +444,7 @@
 	</data>
 </root>
 
-14．服务器修改报数据表(modify)  
+14．服务器修改报数据表(modify)
 作用：当表信息有个别错误时，可根据User_id修改其中的几项数据，而不需要重新下发表地址
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
