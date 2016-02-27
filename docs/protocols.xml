@@ -21,9 +21,9 @@
       result:服务器发送验证结果，result子元素有效（该数据包为服务器发送给采集器）
       -->
 	<id_validate operation="request/sequence/md5/result">
-	<sequence>XXXXXXXX</sequence>
-	<md5>XXXXXXXX</md5>
-	<result>pass/fail</result>
+		<sequence>XXXXXXXX</sequence>
+		<md5>XXXXXXXX</md5>
+		<result>pass/fail</result>
 	</id_validate>
 </root>
 
@@ -513,4 +513,59 @@
 		<item type="10/20/21" ProtocolVer="0/1" channel="2">51101211110010</item>
 		<result  error="0">XXX</result>
 	</realtime_qry>
+</root>
+
+16．数据库操作相关(db_mani)
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<building_id>XXXXXX</building_id>
+		<gateway_id>XXX</gateway_id>
+		<type>db_mani</type>
+	</common>
+	<!-- 配置信息 -->
+	<!--上位机直接下发SQL语句, 交由数据库执行;
+	下位机的数据库执行结果, 返回到上位机, 
+	这个错误信息是数据库返回的, 而不是二次加工过的.
+	可同时下发多条SQL指令, 以id属性作为索引,
+	下位机返回的结果须严格对应id属性.
+	-->
+	<!--节点名sql_stmt, 需要下位机执行的SQL语句, 
+			id属性指定本语句的序列号, 
+		本语句只对上位机组帧和下位机解帧有效;
+	  --节点名sql_result, 下位机执行SQL语句后的结果, 
+			id属性指定本结果对应的SQL系列号, 
+		本语句只对下位机组帧和上位机解帧有效;
+	-->
+	<sql_stmt id="1">create table t_meter_info (id integer primary key, address integer)</sql_stmt><!--只用于上位机下发-->
+	<sql_stmt id="2">create table t_meter_info (id integer primary key, address integer)</sql_stmt><!--只用于上位机下发-->
+	<sql_stmt id="3">create table t_meter_info (id integer primary key, address integer)</sql_stmt><!--只用于上位机下发-->
+	<sql_stmt id="4">create table t_meter_info (id integer primary key, address integer)</sql_stmt><!--只用于上位机下发-->
+	<sql_result id="1">no_error</sql_result><!--只用于下位机返回结果-->
+	<sql_result id="2">table already exites</sql_result><!--只用于下位机返回结果-->
+	<sql_result id="3">SQL statment error at tail</sql_result><!--只用于下位机返回结果-->
+	<sql_result id="4">no_error</sql_result><!--只用于下位机返回结果-->
+</root>
+
+17．执行本地系统命令或程序(local_sys_command)
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<building_id>XXXXXX</building_id>
+		<gateway_id>XXX</gateway_id>
+		<type>local_sys_command</type>
+	</common>
+	<!-- 配置信息 -->
+	<!--上位机直接下发下位机系统命令,
+	交由下位机的Linux执行.
+	-->
+	<!--节点名local_command, 要下位机执行的系统语句, 
+			id属性指定本语句的序列号, 
+		本语句只对上位机组帧和下位机解帧有效;
+	  --节点名exec_result, 下位机执行系统语句后的结果, 
+			id属性指定本结果对应的SQL系列号, 
+		本语句只对下位机组帧和上位机解帧有效;
+	-->
+	<local_command id="1">pwd</local_command><!--只用于上位机下发-->
+	<exec_result id="1">/home/root</exec_result><!--只用于下位机返回结果-->
 </root>
