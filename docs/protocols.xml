@@ -1,521 +1,408 @@
-1．身份验证数据包(id_validate)
+<!-- 功能类型共有以下几种:
+1．	身份验证数据包
+2．	心跳(heart_beat)
+3．	配置信息(sys_config)
+4.	配置需要哪些物理量(request_data)
+5.	配置抄表时间点(time_node)
+6.	操作表地址信息(t_meter_info)
+7.	抄表数据上传(report_update)
+8.	数据库操作相关(db_mani)
+9.	执行本地系统命令或程序(local_sys_command)
+ -->
+<!-- XML通讯通用格式 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!-- 
-      building_id:楼栋编号
+	<!-- 通用部分
       gateway_id:采集器编号
-      type:身份验证数据包的类型
-       -->
-	<common>
-			<building_id>XXXXXX</building_id>
-			<gateway_id>XXX</gateway_id>
-			<type>以下4种操作类型之一</type>
-	</common>
-	<!-- 身份验证 -->
-	<!-- 操作有4种类型
-      request:采集器请求身份验证（该数据包为采集器发送给服务器）
-      sequence:服务器发送一串随机序列，sequence子元素有效（该数据包为服务器发
-送给采集器）
-      md5:采集器发送计算的MD5，md5子元素有效（该数据包为采集器发送给服务器）
-      result:服务器发送验证结果，result子元素有效（该数据包为服务器发送给采集器）
-      -->
-	<id_validate operation="request/sequence/md5/result">
-		<sequence>XXXXXXXX</sequence>
-		<md5>XXXXXXXX</md5>
-		<result>pass/fail</result>
-	</id_validate>
-</root>
-
-2．心跳/校时数据包(heart_beat)
-<?xml version="1.0" encoding="utf-8" ?>
-<root>
-	<!-- 通用部分 -->
-	<!-- 
-      building_id:楼栋编号
-      gateway_id:采集器编号
-      type:心跳/校时数据包的类型
-       -->
-	<common>
-			<building_id>XXXXXX</building_id>
-			<gateway_id>XXX</gateway_id>
-			<type>以下2种操作类型之一</type>
-	</common>
-	<!-- 心跳/校时 ->
-	<!-- 操作有2种类型
-		notify:采集器定期给服务器发送存活通知
-		time:服务器在收到存活通知后发送授时信息，此时子元素time有效
-	-->
-	<heart_beat operation="notify/time">
-        <time>YYYYMMDDHHMMSS</time>
-    </heart_beat>
-</root>
-
-3．能耗远传数据包(data)
-<?xml version="1.0" encoding="utf-8" ?>
-<root>
-	<!-- 通用部分 -->
-	<!-- 
-		building_id:楼栋编号
-		gateway_id:采集器编号
-		type:能耗远传数据包的类型
+      function_type:功能类型
+	  operation_type:操作类型,
+		有“读、写、操作、应答”等类型, 操作对：读-应答、写-应答、操作-应答
     -->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以下5种操作类型之一</type>
+			<gateway_id>XXXXXX</gateway_id>
+			<func_type>协议功能类型</func_type>
+			<oper_type>read/write/do/answer</oper_type>
+
 	</common>
-	<!-- 能耗远传 -->
-	<!-- 操作有4种类型
-	query:服务器查询数据采集器，不需要子元素
-	reply:采集器对服务器查询的应答
-		report:采集器定时上报的能耗数据
-		continuous:采集器断点续传的能耗数据
-		continuous_ack:全部续传数据包接收完成后，服务器对断点续传的应答，不需要子元素
-		元素有5种类型
-			sequence元素:采集器向服务器发送数据的序号
-			parser元素:向服务器发送的数据是否经采集器解析过
-			time元素:数据采集时间
-			total元素:断点续传时有效，表示需要断点续传数据包的总数
-			current元素:断点续传时有效，表示当前断点续传数据包的编号
-			port元素:计量装置的设备号，具有id属性
-			function元素:每个计量装置的具体采集功能，具有下列3种属性，
-				id属性:计量装置的数据采集功能编号（供多功能电能表使用）
-				coding属性:能耗数据分类/分项编码
-				error属性:该功能出现错误的状态码，0表示没有错误
-	-->
-	<data operation="query/reply/report/continuous/continuous_ack">
-		<sequence>XXXXXXXX</sequence>
-		<parser>yes/no</parser>
-		<time>YYYYMMDDHHMMSS</time>
-		<total>XXX</total>
-		<current>XXX</current>
-		<meter id="1">
-			<function id="1" coding="XXX" error="XXX">数据1</function>
-			<function id="2" coding="XXX" error="XXX">数据2</function>
-		</meter>
-		<meter id="2">
-			<function id="1" coding="XXX" error="XXX">数据1</function>
-			<function id="2" coding="XXX" error="XXX">数据2</function>
-		</meter>
-	</data>
+	<!-- 以下各项的字段, 须对应具体的功能类型添加, 见下文-->
 </root>
 
-4．配置信息数据包(config)
+
+1．身份验证(id_validate)
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!-- 
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	-->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以2种操作类型之一</type>
+			<gateway_id>5001</gateway_id>
+			<func_type>id_validate</func_type>
+			<oper_type>read/write/do</oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--操作有2种类型
-	period:表示服务器对采集器采集周期的配置,period子元素有效
-	period_ack:表示采集器对服务器采集周期配置信息的应答
-	-->
-	<config operation="period/period_ack">
-		<period>15</period>
-	</config>
+	<!-- 身份验证 
+	state: 当前操作所处的状态;
+	string：当前传输的字符串;
+     -->
+	<state>request_string->dispatch_string->hash_result->id_result</state>
+	<string>XXXXXXXX</string>
 </root>
 
-5．服务器地址配置数据包
+下位机请求上位机的“当前系统时间字符串”
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!-- 
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	-->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以2种操作类型之一</type>
+			<gateway_id>5001</gateway_id>
+			<func_type>id_validate</func_type>
+			<oper_type>read</oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--操作有2种类型
-	ip_port:表示服务器对地址端口号的配置
-	ip_port _ack:表示采集器对服务器采集周期配置信息的应答
-	-->
-	<config operation="ip_port/ip_port_ack">
-		<server>
-			<ip>***</ip>
-			<dns>***</dns>
-			<port>***</port>
-		</server>
-		<server>
-			<ip>***</ip>
-			<dns>***</dns>
-			<port>***</port>
-		</server>
-	</config>
+	<state>request_string</state>
 </root>
 
-6．下发基础数据库数据包
+上位机下发“当前系统时间字符串”
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!-- 
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	-->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以2种操作类型之一</type>
+			<gateway_id>5001</gateway_id>
+			<func_type>id_validate</func_type>
+			<oper_type>answer</oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!-- 操作有4种类型
-	basic_db: 下发数据库文件的二进制编码
-	basic_db_reply: 响应
-	-->
-	<data operation="basic_db/basic_db_reply">
-		<time>YYYYMMDDHHMMSS</time>
-		<result>fail/pass</result>
-		<db>****</db>
-	</data>
+	<state>dispatch_string</state>
+	<string>0aeefd</string>
 </root>
-  
-7．文件传输数据包(filetransfer)
+
+下位机上传md5加密后的字符串
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!--
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	-->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以3种操作类型之一</type>
+			<gateway_id>5001</gateway_id>
+			<func_type>id_validate</func_type>
+			<oper_type>answer</oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--操作有3种类型
-	file_data：	服务器对采集进行文件传输
-	pack_lost:  服务器查询文件传输缺包情况
-	pack_lost_ack: 采集器回应文件传输缺包的情况
-	元素有 6 种类型
-	pack_total:	文件数据包总数目, 仅在file_data时有效
-	pack_sequence: 传输过程中该包的序号, 仅在file_data时有效
-	file_type:	文件类型，下载表地址是:.meteraddress, 仅在file_data时有效
-	file_data:	文件二进制流数据, 仅在file_data时有效
-	pack_lost_total: 文件传输缺包的总数，仅在pack_lost_ack时有效
-	pack_lost_index: 文件传输缺包的包序号, 仅在pack_lost_ack时有效，当pack_lost_total 为0时 该项无效
-	-->
-	<filetransfer operation="file_data/pack_lost/pack_lost_ack">
-		<pack_total>100</pack_total>
-		<pack_sequence>1</pack_sequence>
-		<file_type>.db</file_type>
-		<file_data>xxxxxx….xxxxx</file_data>
-		<pack_lost_total>xx</pack_lost_total>
-		<pack_lost_index>xx,xx,xx…..xx,xx</pack_lost_index>
-	</filetransfer>
+	<state>hash_result</state>
+	<string>23ac9e6847cc41622affb9623998735b</string>
 </root>
 
-8．查询配置数据包(query_config)
+上位机下发认证结果
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!--
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	building_id: AAAAAA
-	gateway_id: AAA
-	以上ID编码为广播查询编号，可对任意采集器进行点对点的配置信息查询
-	-->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以2种操作类型之一</type>
+			<gateway_id>5001</gateway_id>
+			<func_type>id_validate</func_type>
+			<oper_type>answer</oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--操作有2种类型
-	Query_config：	服务器查询采集器额外配置信息，不需要子元素
-	Reply_config:  采集器对服务器查询信息的应答
-	元素有 3 种类型
-	Period：数据采集周期
-	Report_mode: 数据上报模式 1:主动上报；0:被动查询
-	soft_ver: 软件版本号
-	-->
-	<query operation="query_config/reply_config">
-		<period>15</period>
-		<report_mode>1</report_mode>
-		<soft_ver>XXX</soft_ver>
-	</query>
+	<state>id_result</state>
+	<string>pass/fail</string>
 </root>
 
-9．额外配置数据包(ex_config)
+2．心跳(heart_beat)
+
+上位机心跳包(空闲时的数据格式， 如果有其他数据将要传输到
+该集中器，那么就不必下发此心跳)
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!--
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	-->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以2种操作类型之一</type>
+			<gateway_id>5001</gateway_id>
+			<func_type>heart_beat</func_type>
+			<oper_type></oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--操作有4种类型
-	Id_config: 楼栋和采集器编号设置
-	Id_ack: 采集器对服务器配置楼栋和采集器编号的回应
-	Report_mode: 设置采集器数据上报模式
-	Report_ack:  采集器对服务器设置采集器数据上报模式的回应
-
-	元素有 3 种类型
-	New_building_id：楼栋新编号，仅在Id_config 有效
-	New_gateway_id:  采集器新编号, 仅在Id_config 有效
-	Report_mode: 数据上报模式 1:主动上报；0:被动查询。仅在report_mode时有效
-	-->
-	<ex_config operation="id_config/id_ack/report_mode/report_ack">
-		<new_building_id>XXXXXX</new_building_id>
-		<new_gateway_id>XXX</new_gateway_id>
-		<report_mode>1</report_mode>
-	</ex_config>
 </root>
 
-10．密钥更新数据包(update_secretkey)
+
+
+下位机心跳包(集中器一直主动发送心跳)
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!--
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	-->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以3种操作类型之一</type>
+			<gateway_id>5001</gateway_id>
+			<func_type>heart_beat</func_type>
+			<oper_type></oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--操作有3种类型
-	Md5_key：服务器设置md5密钥
-	AES_key: 服务器设置AES密钥
-	Key_ack:  采集器对服务器密钥设置的应答
-	元素有 2 种类型
-	Md5_keydata: 128位md5校验密钥，仅在md5_key时有效
-	Aes_keydata: 128位AES加密密钥，仅在AES_key时有效
-	-->
-	<update operation="md5_key/aes_key/key_ack">
-		<md5_keydata>xxxx…xxxx</md5_keydata>
-		<aes_keydata>xxxx…xxxx</aes_keydata>
-	</update>
 </root>
 
-11．服务器控制指令数据包(control)
+上位机心跳包(空闲时的数据格式， 如果有其他数据将要传输到
+该集中器，那么就不必下发此心跳)
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!--
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	-->
 	<common>
-	<building_id>XXXXXX</building_id>
-	<gateway_id>XXX</gateway_id>
-	<type>以2种操作类型之一</type>
+			<gateway_id>5001</gateway_id>
+			<func_type>heart_beat</func_type>
+			<oper_type></oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--操作有2种类型
-	reboot：服务器控制采集器重新启动
-	control_ack:  采集器对服务器控制的应答
-	元素有  种类型
-	-->
-	<control operation="reboot/control_ack">
-	</control>
 </root>
 
-12．服务器查询/上报数据表(report_srv)
+
+3．配置信息(sys_config)
+<!------------------------------------------->
+上位机读取下位机配置
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!--
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	building_id: AAAAAA
-	gateway_id: AAA
-	以上ID编码为广播查询编号，可对任意采集器进行点对点的配置信息查询
-	-->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以下2种操作类型之一</type>
+		<gateway_id>5001</gateway_id>
+		<func_type>sys_config</func_type>
+		<oper_type>read</oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--操作有2种类型
-	Query_req:     服务器查询采集器数据功能
-	Query_rsp:      采集器查询功能答复
-
-	元素有 4 种类型
-	condition： 数据上报的条件,仅在Query_req时有效,使用标准的sql语句
-	flag:       0/1：成功/失败标志，仅在Query_rsp时有效
-	result:    上报的查询结果，仅在Query_rsp时有效,count为查询的数据个数
-	table_item:   查询的表项，仅在Query_rsp时有效
-	-->
-	<report_srv operation="Query_req/Query_rsp">
-		<condition>select * from Meter_Info_Table</condition>
-		<flag>0</flag>
-		<result count="20">
-			<table_item>15-13-01-01, 11110071100109,25,1,3,1010, 0001</talbe_item>
-			<table_item>XXX</talbe_item>
-			<talble_item>XXX</talbe_item>
-		</result>
-	</report_srv>
 </root>
 
-13．采集器数据表主动上报(report_tbl)
-作用: 当
+下位机应答上位机的查询配置请求
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!--
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	building_id: AAAAAA
-	gateway_id: AAA
-	以上ID编码为广播查询编号，可对任意采集器进行点对点的配置信息查询
-	-->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以1种操作类型之一</type>
+		<gateway_id>5001</gateway_id>
+		<func_type>sys_config</func_type>
+		<oper_type>answer</oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!-- 操作有4种类型 
-	query:服务器查询数据采集器，不需要子元素 
-	reply:采集器对服务器查询的应答 
-	report:采集器定时上报的能耗数据 
-	continuous:采集器断点续传的能耗数据 
-	continuous_ack:全部续传数据包接收完成后，服务器对断点续传的应答，不需要子元素
-	元素有5种类型 
-	sequence元素:采集器向服务器发送数据的序号 
-	parser元素:向服务器发送的数据是否经采集器解析过 
-	time元素:数据采集时间 
-	total元素:断点续传时有效，表示需要断点续传数据包的总数 
-	current元素:断点续传时有效，表示当前断点续传数据包的编号 
-	port元素:计量装置的设备号，具有id属性 
-	function元素:每个计量装置的具体采集功能，具有下列3种属性， 
-	id属性:计量装置的数据采集功能编号（供多功能电能表使用） 
-	coding属性:能耗数据分类/分项编码 
-
-	error属性:该功能出现错误的状态码，0表示没有错误 
-	-->
-	<!--操作有4种类型
-	realtime_qry_req：	服务器查询数据表请求
-	realtime_qry_rsp:    采集器查询数据表答复
-	元素有 2 种类型
-	meter_addr：  表地址，支持多个表同时查询，仅在realtime_qry_req有效
-	type: 表类型 10：水表 20：热表 21：电表 25：阀门
-	version：协议类型 
-	result:       成功/失败标志，仅在realtime_qry_rsp时有效
-	meter 上报数据格式为：Electric_Meter_Table/Heat_Meter_Table/Water_Meter_Table/Valve_Table
-	例如：上报热表数据格式为：Meter_addr，Read_time，Subitem，Acc_heat
-	erro: 0:没有错误，1：通讯超时，2：数据验证错误
-	-->
-	<data operation="query/reply/report/continuous/continuous_ack">
-		<sequence>XXXXXXXX</sequence>
-		<parser>yes/no</parser>
-		<time>YYYYMMDDHHMMSS</time>
-		<total>XXX</total>
-		<current>XXX</current>
-		<user id="15-13-01-01">
-			<table type="25">数据</table>
-		</user>
-		<user id="15-13-01-02">
-			<table type="25">数据</table>
-		</user>
-	</data>
+	<primary_server></primary_server>
+	<primary_dns></primary_dns>
+	<primary_port></primary_port>
+	<second_server></second_server>
+	<second_dns></second_dns>
+	<second_port></second_port>
+	<gateway_id></gateway_id>
+	<net_type></net_type>
+	<md5_key></md5_key>
+	<aes_key></aes_key>
+	<collect_cycle></collect_cycle>
+	<report_mode></report_mode>
+	<collect_mode></collect_mode>
+	<beat_cycle></beat_cycle>
 </root>
+<!------------------------------------------->
 
-14．服务器修改报数据表(modify)
-作用：当表信息有个别错误时，可根据User_id修改其中的几项数据，而不需要重新下发表地址
+上位机设置下位机配置
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!--
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	building_id: AAAAAA
-	gateway_id: AAA
-	以上ID编码为广播查询编号，可对任意采集器进行点对点的配置信息查询
-	-->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以1种操作类型之一</type>
+		<gateway_id>5001</gateway_id>
+		<func_type>sys_config</func_type>
+		<oper_type>write</oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--操作有4种类型
-	modify_req：	服务器修改数据表请求
-	modify_rsp:    采集器修改数据表答复
-	元素有 3 种类型
-	Content：数据修改内容,仅在modify_req时有效,使用标准的sql语句
-	Num: 修改语句的个数，最大支持一次带50个修改语句
-	flag:  成功/失败标志，仅在modify_rsp时有效,0为成功，大于0为在执行第几个content时失败
-	-->
-	<modify operation=" modify_req/modify_rsp" num= "6">
-		<content  id="1">update Meter_Info_Table SET Meter_type ='20' where User_id='15-13-01-01'</content>
-		<content  id="XX">XXXXXX</content>
-		<flag>XXX</flag>
-	</modify>
+	<primary_server></primary_server>
+	<primary_dns></primary_dns>
+	<primary_port></primary_port>
+	<second_server></second_server>
+	<second_dns></second_dns>
+	<second_port></second_port>
+	<gateway_id></gateway_id>
+	<net_type></net_type>
+	<md5_key></md5_key>
+	<aes_key></aes_key>
+	<collect_cycle></collect_cycle>
+	<report_mode></report_mode>
+	<collect_mode></collect_mode>
+	<beat_cycle></beat_cycle>
 </root>
 
-15．服务器实时查询数据(realtime_qry)
+下位机向上位机返回执行状态(成功/失败)
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- 通用部分 -->
-	<!--
-	building_id:楼栋编号
-	gateway_id:采集器编号
-	type:配置信息数据包的类型
-	building_id: AAAAAA
-	gateway_id: AAA
-	以上ID编码为广播查询编号，可对任意采集器进行点对点的配置信息查询
-	-->
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>以1种操作类型之一</type>
+		<gateway_id>5001</gateway_id>
+		<func_type>sys_config</func_type>
+		<oper_type>answer</oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--操作有4种类型
-	realtime_qry_req：	服务器查询数据表请求
-	realtime_qry_rsp:    采集器查询数据表答复
-	元素有 2 种类型
-	Item:下发的表信息，仅在realtime_qry_req时有效
-	type: 表类型 10：水表 20：热表 21：电表 25：阀门
-	ProtocolVer：协议类型 
-	Channel: 通讯通道，1-6为mbus通道，7-8为485通道
-	result:       成功/失败标志，仅在realtime_qry_rsp时有效
-	erro: 0:没有错误，1：通讯超时，2：数据验证错误
-	meter 上报数据格式为：Electric_Meter_Table/Heat_Meter_Table/Water_Meter_Table/Valve_Table
-	例如：上报热表数据格式为：Meter_addr，Read_time，Subitem，Acc_heat
-	-->
-	<realtime_qry operation=" realtime_qry_req/realtime_qry_rsp">
-		<item type="10/20/21" ProtocolVer="0/1" channel="2">51101211110010</item>
-		<result  error="0">XXX</result>
-	</realtime_qry>
+	<answer>SUCCESS/FAIL</answer>
 </root>
 
-16．数据库操作相关(db_mani)
+
+4．配置需要哪些物理量(request_data)
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>request_data</func_type>
+		<oper_type>write</oper_type>
+	</common>
+	<row id="1">
+		<!--列名可用宏定义替代具体字符串，以减少传输的数据量-->
+		<f_meter_type></f_meter_type>
+		<f_item_index></f_item_index>
+		<f_col_name></f_col_name>
+	</<row>
+	<row id="2">
+		<f_meter_type></f_meter_type>
+		<f_item_index></f_item_index>
+		<f_col_name></f_col_name>
+	</<row>
+	<row id="3">
+		<f_meter_type></f_meter_type>
+		<f_item_index></f_item_index>
+		<f_col_name></f_col_name>
+	</<row>
+</root>
+
+
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>request_data</func_type>
+		<oper_type>answer</oper_type>
+	</common>
+	<answer>SUCCESS/FAIL</answer>
+</root>
+
+
+
+5．配置抄表时间点(time_node)
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>time_node</func_type>
+		<oper_type>write</oper_type>
+	</common>
+	<time_node>00:00;06:00...</time_node>
+</root>
+
+
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>time_node</func_type>
+		<oper_type>answer</oper_type>
+	</common>
+	<answer>SUCCESS/FAIL</answer>
+</root>
+
+
+
+6．操作表地址信息(t_meter_info)
+
+<!----------------上位机下发表地址------------------->
+上位机下发表地址
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>t_meter_info</func_type>
+		<oper_type>write</oper_type>
+	</common>
+	<trans>
+		<total_meter_num>98</total_meter_num><!--总共要下发的表地址数量 -->
+		<frame_idx>9</frame_idx><!--本帧的索引 -->
+		<meter_num>7</meter_num><!--本帧共包含多少个表地址 -->
+	</trans>
+	<row id="1">
+		<!--列名可用宏定义替代具体字符串，以减少传输的数据量-->
+		<f_meter_address></f_meter_address>
+		<f_meter_type></f_meter_type>
+		<f_meter_channel></f_meter_channel>
+		<f_meter_proto_type></f_meter_proto_type>
+		<f_install_pos></f_install_pos>
+		<f_device_id></f_device_id>
+	</<row>
+	<row id="2">
+		<!--列名可用宏定义替代具体字符串，以减少传输的数据量-->
+		<f_meter_address></f_meter_address>
+		<f_meter_type></f_meter_type>
+		<f_meter_channel></f_meter_channel>
+		<f_meter_proto_type></f_meter_proto_type>
+		<f_install_pos></f_install_pos>
+		<f_device_id></f_device_id>
+	</<row>
+</root>
+
+下位机的执行结果
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>t_meter_info</func_type>
+		<oper_type>answer</oper_type>
+	</common>
+	<answer>SUCCESS/FAIL</answer>
+</root>
+
+<!------------上位机查询下位机的表地址信息------------------->
+上位机查询下位机表地址信息
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>t_meter_info</func_type>
+		<oper_type>read</oper_type>
+	</common>
+	<!-- 可选参数trans, 用来进行错误重连时, 具体要第几帧的数据 -->
+	<trans>
+		<frame_idx>9</frame_idx><!--要查询的帧的索引 -->
+	</trans>
+</root>
+
+下位机的执行结果
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>t_meter_info</func_type>
+		<oper_type>answer</oper_type>
+	</common>
+	<trans>
+		<total_meter_num>98</total_meter_num><!--总共要下发的表地址数量 -->
+		<frame_idx>9</frame_idx><!--本帧的索引 -->
+		<meter_num>7</meter_num><!--本帧共包含多少个表地址 -->
+	</trans>
+	<row id="1">
+		<!--列名可用宏定义替代具体字符串，以减少传输的数据量-->
+		<f_meter_address></f_meter_address>
+		<f_meter_type></f_meter_type>
+		<f_meter_channel></f_meter_channel>
+		<f_meter_proto_type></f_meter_proto_type>
+		<f_install_pos></f_install_pos>
+		<f_device_id></f_device_id>
+	</<row>
+	<row id="2">
+		<!--列名可用宏定义替代具体字符串，以减少传输的数据量-->
+		<f_meter_address></f_meter_address>
+		<f_meter_type></f_meter_type>
+		<f_meter_channel></f_meter_channel>
+		<f_meter_proto_type></f_meter_proto_type>
+		<f_install_pos></f_install_pos>
+		<f_device_id></f_device_id>
+	</<row>
+</root>
+
+
+7. 抄表数据上传(report_update)
+
+下位机上报抄表数据
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>report_update</func_type>
+		<oper_type>write</oper_type>
+	</common>
+	<trans>
+		<total_meter_num>98</total_meter_num><!--总共要上报的抄表数据条数 -->
+		<frame_idx>9</frame_idx><!--本帧的索引 -->
+		<meter_num>7</meter_num><!--本帧共包含多少条抄表数据 -->
+		<time_node></time_node><!--上报的是那个时间点的数据 -->
+	</trans>
+	<row id="1">
+		<!--列名可用宏定义替代具体字符串，以减少传输的数据量-->
+		<f_meter_address></f_meter_address>
+		<f_meter_type></f_meter_type>
+		<f_time></f_time>
+		<f_total_active_power></f_total_active_power>
+		<f_maximum_demand></f_maximum_demand>
+		<f_overall_power_factor></f_overall_power_factor>
+		.
+		.
+		.
+	</<row>
+</root>
+
+上位机的接收结果
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>report_update</func_type>
+		<oper_type>answer</oper_type>
+	</common>
+	<answer>SUCCESS/FAIL</answer>
+</root>
+
+
+8．数据库操作相关(db_mani)
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -547,7 +434,7 @@
 	<sql_result id="4">no_error</sql_result><!--只用于下位机返回结果-->
 </root>
 
-17．执行本地系统命令或程序(local_sys_command)
+9．执行本地系统命令或程序(local_sys_command)
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
