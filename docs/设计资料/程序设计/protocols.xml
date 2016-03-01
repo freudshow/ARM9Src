@@ -2,7 +2,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<!-- 通用部分
-      gateway_id:采集器编号
+      gateway_id:集中器编号
       function_type:功能类型
 		功能类型共有以下几种:
 			1．	身份验证数据包(id_validate)
@@ -14,7 +14,7 @@
 			7.	抄表数据上传(report_update)
 			8.	数据库操作相关(db_mani)
 			9.	执行本地系统命令或程序(local_sys_command)
-	  operation_type:操作类型,
+	  oper_type:操作类型,
 		有“读、写、操作、应答”等类型, 操作对：读-应答、写-应答、操作-应答
     -->
 	<common>
