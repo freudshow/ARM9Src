@@ -1,20 +1,19 @@
-<!-- 功能类型共有以下几种:
-1．	身份验证数据包
-2．	心跳(heart_beat)
-3．	配置信息(sys_config)
-4.	配置需要哪些物理量(request_data)
-5.	配置抄表时间点(time_node)
-6.	操作表地址信息(t_meter_info)
-7.	抄表数据上传(report_update)
-8.	数据库操作相关(db_mani)
-9.	执行本地系统命令或程序(local_sys_command)
- -->
 <!-- XML通讯通用格式 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<!-- 通用部分
       gateway_id:采集器编号
       function_type:功能类型
+		功能类型共有以下几种:
+			1．	身份验证数据包(id_validate)
+			2．	心跳(heart_beat)
+			3．	配置信息(sys_config)
+			4.	配置需要哪些物理量(request_data)
+			5.	配置抄表时间点(time_node)
+			6.	操作表地址信息(meter_info)
+			7.	抄表数据上传(report_update)
+			8.	数据库操作相关(db_mani)
+			9.	执行本地系统命令或程序(local_sys_command)
 	  operation_type:操作类型,
 		有“读、写、操作、应答”等类型, 操作对：读-应答、写-应答、操作-应答
     -->
@@ -22,29 +21,30 @@
 			<gateway_id>XXXXXX</gateway_id>
 			<func_type>协议功能类型</func_type>
 			<oper_type>read/write/do/answer</oper_type>
-
 	</common>
 	<!-- 以下各项的字段, 须对应具体的功能类型添加, 见下文-->
 </root>
 
 
-1．身份验证(id_validate)
+<!---------------- 1．身份验证(id_validate) ---------------->
+
+<!-- 通用格式 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
 			<gateway_id>5001</gateway_id>
 			<func_type>id_validate</func_type>
-			<oper_type>read/write/do</oper_type>
+			<oper_type>read/write/answer</oper_type>
 	</common>
-	<!-- 身份验证 
-	state: 当前操作所处的状态;
-	string：当前传输的字符串;
+	<!-- 身份验证
+		state: 当前操作所处的状态;
+		string：当前传输的字符串;
      -->
 	<state>request_string->dispatch_string->hash_result->id_result</state>
 	<string>XXXXXXXX</string>
 </root>
 
-下位机请求上位机的“当前系统时间字符串”
+<!-- 下位机请求上位机的"当前系统时间字符串" -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -55,7 +55,7 @@
 	<state>request_string</state>
 </root>
 
-上位机下发“当前系统时间字符串”
+<!-- 上位机下发"当前系统时间字符串" -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -67,7 +67,7 @@
 	<string>0aeefd</string>
 </root>
 
-下位机上传md5加密后的字符串
+<!-- 下位机上传md5加密后的字符串 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -79,7 +79,7 @@
 	<string>23ac9e6847cc41622affb9623998735b</string>
 </root>
 
-上位机下发认证结果
+<!-- 上位机下发认证结果 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -91,10 +91,35 @@
 	<string>pass/fail</string>
 </root>
 
-2．心跳(heart_beat)
+<!---------------- 2．心跳(heart_beat) ---------------->
 
-上位机心跳包(空闲时的数据格式， 如果有其他数据将要传输到
-该集中器，那么就不必下发此心跳)
+<!-- 上位机心跳包(空闲时的数据格式， 
+	 如果有其他数据将要传输到
+	 该集中器，那么就不必下发此心跳) 
+-->
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+			<gateway_id>5001</gateway_id>
+			<func_type>heart_beat</func_type>
+			<oper_type></oper_type>
+	</common>
+</root>
+
+<!-- 下位机心跳包(集中器一直主动发送心跳) -->
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+			<gateway_id>5001</gateway_id>
+			<func_type>heart_beat</func_type>
+			<oper_type></oper_type>
+	</common>
+</root>
+
+<!-- 上位机心跳包(空闲时的数据格式， 
+	 如果有其他数据将要传输到该集中器，
+	 那么就不必下发此心跳)
+-->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -105,32 +130,9 @@
 </root>
 
 
+<!---------------- 3．配置信息(sys_config) ---------------->
 
-下位机心跳包(集中器一直主动发送心跳)
-<?xml version="1.0" encoding="utf-8" ?>
-<root>
-	<common>
-			<gateway_id>5001</gateway_id>
-			<func_type>heart_beat</func_type>
-			<oper_type></oper_type>
-	</common>
-</root>
-
-上位机心跳包(空闲时的数据格式， 如果有其他数据将要传输到
-该集中器，那么就不必下发此心跳)
-<?xml version="1.0" encoding="utf-8" ?>
-<root>
-	<common>
-			<gateway_id>5001</gateway_id>
-			<func_type>heart_beat</func_type>
-			<oper_type></oper_type>
-	</common>
-</root>
-
-
-3．配置信息(sys_config)
-<!------------------------------------------->
-上位机读取下位机配置
+<!-- 上位机读取下位机配置 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -140,7 +142,7 @@
 	</common>
 </root>
 
-下位机应答上位机的查询配置请求
+<!-- 下位机应答上位机的查询配置请求 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -163,9 +165,8 @@
 	<collect_mode></collect_mode>
 	<beat_cycle></beat_cycle>
 </root>
-<!------------------------------------------->
 
-上位机设置下位机配置
+<!-- 上位机设置下位机配置-->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -189,7 +190,7 @@
 	<beat_cycle></beat_cycle>
 </root>
 
-下位机向上位机返回执行状态(成功/失败)
+<!-- 下位机向上位机返回执行状态(成功/失败) -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -201,7 +202,7 @@
 </root>
 
 
-4．配置需要哪些物理量(request_data)
+<!---------------- 4．配置需要哪些物理量(request_data) ---------------->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -240,7 +241,7 @@
 
 
 
-5．配置抄表时间点(time_node)
+<!---------------- 5．配置抄表时间点(time_node) ---------------->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -263,16 +264,14 @@
 </root>
 
 
+<!---------------- 6．操作表地址信息(meter_info) ---------------->
 
-6．操作表地址信息(t_meter_info)
-
-<!----------------上位机下发表地址------------------->
-上位机下发表地址
+<!--上位机下发表地址-->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
 		<gateway_id>5001</gateway_id>
-		<func_type>t_meter_info</func_type>
+		<func_type>meter_info</func_type>
 		<oper_type>write</oper_type>
 	</common>
 	<trans>
@@ -300,24 +299,23 @@
 	</<row>
 </root>
 
-下位机的执行结果
+<!-- 下位机的执行结果 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
 		<gateway_id>5001</gateway_id>
-		<func_type>t_meter_info</func_type>
+		<func_type>meter_info</func_type>
 		<oper_type>answer</oper_type>
 	</common>
 	<answer>SUCCESS/FAIL</answer>
 </root>
 
-<!------------上位机查询下位机的表地址信息------------------->
-上位机查询下位机表地址信息
+<!-- 上位机查询下位机表地址信息 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
 		<gateway_id>5001</gateway_id>
-		<func_type>t_meter_info</func_type>
+		<func_type>meter_info</func_type>
 		<oper_type>read</oper_type>
 	</common>
 	<!-- 可选参数trans, 用来进行错误重连时, 具体要第几帧的数据 -->
@@ -326,12 +324,12 @@
 	</trans>
 </root>
 
-下位机的执行结果
+<!-- 下位机的执行结果 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
 		<gateway_id>5001</gateway_id>
-		<func_type>t_meter_info</func_type>
+		<func_type>meter_info</func_type>
 		<oper_type>answer</oper_type>
 	</common>
 	<trans>
@@ -360,9 +358,9 @@
 </root>
 
 
-7. 抄表数据上传(report_update)
+<!---------------- 7. 抄表数据上传(report_update) ---------------->
 
-下位机上报抄表数据
+<!-- 下位机上报抄表数据 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -388,9 +386,12 @@
 		.
 		.
 	</<row>
+	.
+	.
+	.
 </root>
 
-上位机的接收结果
+<!-- 上位机的接收结果 -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -402,57 +403,71 @@
 </root>
 
 
-8．数据库操作相关(db_mani)
+<!---------------- 8．数据库操作相关(db_mani) ---------------->
+
+<!--sql_stmt, 需要下位机执行的SQL语句, 
+		id属性指定本语句的序列号, 
+		本语句只对上位机组帧和下位机解帧有效;
+	sql_result, 下位机执行SQL语句后的结果, 
+		id属性指定本结果对应的SQL系列号, 
+		本语句只对下位机组帧和上位机解帧有效;
+-->
+
+<!--上位机直接下发SQL语句, 交由数据库执行;
+	可同时下发多条SQL指令, 以id属性作为索引.
+-->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>db_mani</type>
+		<gateway_id>5001</gateway_id>
+		<func_type>db_mani</func_type>
+		<oper_type>do</oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--上位机直接下发SQL语句, 交由数据库执行;
-	下位机的数据库执行结果, 返回到上位机, 
-	这个错误信息是数据库返回的, 而不是二次加工过的.
-	可同时下发多条SQL指令, 以id属性作为索引,
-	下位机返回的结果须严格对应id属性.
-	-->
-	<!--节点名sql_stmt, 需要下位机执行的SQL语句, 
-			id属性指定本语句的序列号, 
-		本语句只对上位机组帧和下位机解帧有效;
-	  --节点名sql_result, 下位机执行SQL语句后的结果, 
-			id属性指定本结果对应的SQL系列号, 
-		本语句只对下位机组帧和上位机解帧有效;
-	-->
-	<sql_stmt id="1">create table t_meter_info (id integer primary key, address integer)</sql_stmt><!--只用于上位机下发-->
-	<sql_stmt id="2">create table t_meter_info (id integer primary key, address integer)</sql_stmt><!--只用于上位机下发-->
-	<sql_stmt id="3">create table t_meter_info (id integer primary key, address integer)</sql_stmt><!--只用于上位机下发-->
-	<sql_stmt id="4">create table t_meter_info (id integer primary key, address integer)</sql_stmt><!--只用于上位机下发-->
-	<sql_result id="1">no_error</sql_result><!--只用于下位机返回结果-->
-	<sql_result id="2">table already exites</sql_result><!--只用于下位机返回结果-->
-	<sql_result id="3">SQL statment error at tail</sql_result><!--只用于下位机返回结果-->
-	<sql_result id="4">no_error</sql_result><!--只用于下位机返回结果-->
+	<sql_stmt id="1">create table meter_info (id integer primary key, address integer)</sql_stmt><!--只用于上位机下发-->
 </root>
 
-9．执行本地系统命令或程序(local_sys_command)
+<!--下位机的数据库执行结果, 返回到上位机, 
+	这个错误信息是数据库返回的, 而不是二次加工过的.
+	下位机返回的结果须严格对应id属性.
+-->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
-		<building_id>XXXXXX</building_id>
-		<gateway_id>XXX</gateway_id>
-		<type>local_sys_command</type>
+		<gateway_id>5001</gateway_id>
+		<func_type>db_mani</func_type>
+		<oper_type>answer</oper_type>
 	</common>
-	<!-- 配置信息 -->
-	<!--上位机直接下发下位机系统命令,
-	交由下位机的Linux执行.
-	-->
-	<!--节点名local_command, 要下位机执行的系统语句, 
-			id属性指定本语句的序列号, 
+	<sql_result id="1">no_error</sql_result><!--只用于下位机返回结果-->
+</root>
+
+<!---------------- 9．执行本地系统命令或程序(local_sys_command) ---------------->
+
+<!--local_command, 要下位机执行的系统语句, 
+		id属性指定本语句的序列号, 
 		本语句只对上位机组帧和下位机解帧有效;
-	  --节点名exec_result, 下位机执行系统语句后的结果, 
-			id属性指定本结果对应的SQL系列号, 
+	exec_result, 下位机执行系统语句后的结果, 
+		id属性指定本结果对应的SQL系列号, 
 		本语句只对下位机组帧和上位机解帧有效;
-	-->
+-->
+
+<!--上位机下发下位机系统命令, 交由下位机的Linux执行.-->
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>local_sys_command</func_type>
+		<oper_type>do</oper_type>
+	</common>
 	<local_command id="1">pwd</local_command><!--只用于上位机下发-->
+</root>
+
+<!-- 下位机执行上位机下发的Linux命令后的结果 -->
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<common>
+		<gateway_id>5001</gateway_id>
+		<func_type>local_sys_command</func_type>
+		<oper_type>answer</oper_type>
+	</common>
 	<exec_result id="1">/home/root</exec_result><!--只用于下位机返回结果-->
 </root>
