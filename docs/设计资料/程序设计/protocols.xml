@@ -5,7 +5,7 @@
       gateway_id:集中器编号
       function_type:功能类型
 		功能类型共有以下几种:
-			1．	身份验证数据包(id_validate)
+			1．	身份验证(id_validate)
 			2．	心跳(heart_beat)
 			3．	配置信息(sys_config)
 			4.	配置需要哪些物理量(request_data)
@@ -26,7 +26,7 @@
 </root>
 
 
-<!---------------- 1．身份验证(id_validate) ---------------->
+<!---------------- 1. 身份验证(id_validate) ---------------->
 
 <!-- 通用格式 -->
 <?xml version="1.0" encoding="utf-8" ?>
@@ -88,10 +88,10 @@
 			<oper_type>answer</oper_type>
 	</common>
 	<state>id_result</state>
-	<string>pass/fail</string>
+	<string>SUCCESS/FAIL</string>
 </root>
 
-<!---------------- 2．心跳(heart_beat) ---------------->
+<!---------------- 2. 心跳(heart_beat) ---------------->
 
 <!-- 上位机心跳包(空闲时的数据格式， 
 	 如果有其他数据将要传输到
@@ -116,21 +116,8 @@
 	</common>
 </root>
 
-<!-- 上位机心跳包(空闲时的数据格式， 
-	 如果有其他数据将要传输到该集中器，
-	 那么就不必下发此心跳)
--->
-<?xml version="1.0" encoding="utf-8" ?>
-<root>
-	<common>
-			<gateway_id>5001</gateway_id>
-			<func_type>heart_beat</func_type>
-			<oper_type></oper_type>
-	</common>
-</root>
 
-
-<!---------------- 3．配置信息(sys_config) ---------------->
+<!---------------- 3. 配置信息(sys_config) ---------------->
 
 <!-- 上位机读取下位机配置 -->
 <?xml version="1.0" encoding="utf-8" ?>
@@ -202,7 +189,9 @@
 </root>
 
 
-<!---------------- 4．配置需要哪些物理量(request_data) ---------------->
+<!---------------- 4. 配置需要哪些物理量(request_data) ---------------->
+
+<!-- 上位机设置下位机配置-->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -228,7 +217,7 @@
 	</<row>
 </root>
 
-
+<!-- 下位机向上位机返回执行状态(成功/失败) -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -240,8 +229,9 @@
 </root>
 
 
+<!---------------- 5. 配置抄表时间点(time_node) ---------------->
 
-<!---------------- 5．配置抄表时间点(time_node) ---------------->
+<!-- 上位机设置下位机配置-->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -252,7 +242,7 @@
 	<time_node>00:00;06:00...</time_node>
 </root>
 
-
+<!-- 下位机向上位机返回执行状态(成功/失败) -->
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<common>
@@ -264,7 +254,7 @@
 </root>
 
 
-<!---------------- 6．操作表地址信息(meter_info) ---------------->
+<!---------------- 6. 操作表地址信息(meter_info) ---------------->
 
 <!--上位机下发表地址-->
 <?xml version="1.0" encoding="utf-8" ?>
@@ -372,13 +362,14 @@
 		<total_meter_num>98</total_meter_num><!--总共要上报的抄表数据条数 -->
 		<frame_idx>9</frame_idx><!--本帧的索引 -->
 		<meter_num>7</meter_num><!--本帧共包含多少条抄表数据 -->
-		<time_node></time_node><!--上报的是那个时间点的数据 -->
+		<time_node></time_node><!--上报的是哪个时间点的数据 -->
 	</trans>
 	<row id="1">
 		<!--列名可用宏定义替代具体字符串，以减少传输的数据量-->
 		<f_meter_address></f_meter_address>
 		<f_meter_type></f_meter_type>
 		<f_time></f_time>
+		<f_timestamp></f_timestamp>
 		<f_total_active_power></f_total_active_power>
 		<f_maximum_demand></f_maximum_demand>
 		<f_overall_power_factor></f_overall_power_factor>
@@ -403,8 +394,7 @@
 </root>
 
 
-<!---------------- 8．数据库操作相关(db_mani) ---------------->
-
+<!---------------- 8. 数据库操作相关(db_mani) ---------------->
 <!--sql_stmt, 需要下位机执行的SQL语句, 
 		id属性指定本语句的序列号, 
 		本语句只对上位机组帧和下位机解帧有效;
@@ -440,8 +430,8 @@
 	<sql_result id="1">no_error</sql_result><!--只用于下位机返回结果-->
 </root>
 
-<!---------------- 9．执行本地系统命令或程序(local_sys_command) ---------------->
 
+<!---------------- 9. 执行本地系统命令或程序(local_sys_command) ---------------->
 <!--local_command, 要下位机执行的系统语句, 
 		id属性指定本语句的序列号, 
 		本语句只对上位机组帧和下位机解帧有效;
